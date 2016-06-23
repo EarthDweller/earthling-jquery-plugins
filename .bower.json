@@ -1,0 +1,12 @@
+{
+  "name": "earthling-jquery-plugins",
+  "_release": "e512354a7f",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "e512354a7f6197fbe6210199abfdf15c8edcabfb"
+  },
+  "_source": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/js-jquery-plugins.git",
+  "_target": "*",
+  "_originalSource": "earthling-jquery-plugins"
+}

@@ -1,0 +1,25 @@
+{
+  "name": "earthling-jquery-plugins",
+  "authors": [
+    {
+      "name": "Timofey",
+      "email": "T-Soloveychik@ya.ru"
+    }
+  ],
+  "description": "jQuery plugins",
+  "main": [
+    "ajax-with-swal.js"
+  ],
+  "keywords": [
+    "jquery",
+    "sweetalert"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/js-jquery-plugins.git"
+  },
+  "devDependencies": {
+    "jquery": "~2.1.4",
+    "sweetalert": "*"
+  }
+}

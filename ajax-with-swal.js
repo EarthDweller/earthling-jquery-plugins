@@ -2,28 +2,63 @@
  * @copyright 1september 2016
  */
 
-$.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
+$.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 	var errorTitle = "Ошибка";
 
 	var errors = [];
 
-	if (!uri)
+	var values;
+
+	if (typeof uriOrData != "object")
+		values = {
+			uri : uriOrData
+		};
+	else
+		values = uriOrData;
+
+
+	if (!uriOrData.uri)
 		errors.push("Не указан аргумент «uri»!");
 
-	if (!data)
+
+
+	if (!data && !values.data)
 		errors.push("Не указан аргумент «data»!");
 
-	if (!(data instanceof Object))
+	if (data && !values.data)
+		values.data = data;
+
+	if (!(values.data instanceof Object))
 		errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof data);
 
-	if (!errorText)
+
+
+
+
+
+	if (!errorText && !values.errorText)
 		errorText  = "Не удалось обработать отправить запрос на сервер";
 
-	if (!onSuccess)
+	if (!values.errorText)
+		values.errorText = errorText;
+
+
+
+	if (!onSuccess && !values.onSuccess)
 		errors.push("Не указан аргумент «onSuccess»!");
 
-	if (!(onSuccess instanceof Function))
+	if (!(onSuccess instanceof Function) && !(values.onSuccess && values.onSuccess instanceof Function))
 		errors.push("Аргумент «onSuccess»! должен быть функцией! Указан " + typeof onSuccess);
+
+	if (!values.onSuccess)
+		values.onSuccess = onSuccess;
+
+
+
+	if (!faElem && values.faElem)
+		faElem = values.faElem;
+
+
 
 	if (errors.length)
 		return swal({
@@ -39,11 +74,15 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 		if (!faElem)
 			faElem = jElem;
 
-		if (!data)
-			data = jElem.serialize();
+		if (!values.data)
+			values.data = jElem.serialize();
 
 		var jqXHR = faElem.data("jqXHR");
-		if (jqXHR && jqXHR.readyState == 1)
+		if (jqXHR && jqXHR.readyState == 1 && values.abort)
+		{
+			jqXHR.abort(values.abort);
+		}
+		else if (jqXHR && jqXHR.readyState == 1)
 		{
 			swal({
 					 title             : "Прервать отправку сообщения?"
@@ -59,7 +98,7 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 				,function ( isConfirm ) {
 					if (isConfirm) {
 						if (+jqXHR.readyState != 4) {
-							jqXHR.abort();
+							jqXHR.abort(200);
 							swal({
 								 title            : "Передача остановлена!"
 								,text             : "Передача прервана на Вашем устройстве."
@@ -86,12 +125,12 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 				 type       : "POST"
 				,dataType   : "json"
 				,context    : faElem
-				,data       : data
+				,data       : values.data
 				,cache      : false
-				,processData: (data.constructor != FormData)
-				,contentType: (data.constructor != FormData ? "application/x-www-form-urlencoded; charset=UTF-8" : false)
-				,timeout    : 50 * 1000 // 50 секунд
-				,url        : uri
+				,processData: (values.data.constructor != FormData)
+				,contentType: (values.data.constructor != FormData ? "application/x-www-form-urlencoded; charset=UTF-8" : false)
+				,timeout    : (values.timeout ? values.timeout : (50 * 1000)) // 50 секунд
+				,url        : values.uri
 				,beforeSend : function ( jqXHR ) {
 					faElem.data("jqXHR" ,jqXHR);
 
@@ -108,7 +147,7 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 				,success    : function ( data ) {
 					try {
 						if (data.success) {
-							onSuccess(data);
+							values.onSuccess(data);
 						}
 						else {
 							swal({
@@ -122,10 +161,11 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 					catch ($e) {
 						swal({
 							 title            : errorTitle
-							,text             : errorText + "\n" + $e
+							,text             : values.errorText + "\n" + $e
 							,type             : "error"
 							,allowOutsideClick: true
 						});
+						console.log($e);
 					}
 					finally {
 					}
@@ -159,6 +199,8 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 						}
 					}
 					catch ($e) {
+						console.log($e);
+
 						errorTitle = "Ошибка";
 						errorText  = "Не удалось обработать ответ от сервера!" + "\n" + $e;
 					}
@@ -167,17 +209,16 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 
 						faElem.attr("class",faElem.data("fa"));
 
-						console.log('textStatus');
-						console.log(textStatus);
-						console.log('XMLHttpRequest');
-						console.log(XMLHttpRequest);
+						if (!(textStatus == "abort" && values.abort))
+							swal({
+								 title            : errorTitle
+								,text             : errorText
+								,type             : "error"
+								,allowOutsideClick: true
+							});
 
-						swal({
-							 title            : errorTitle
-							,text             : errorText
-							,type             : "error"
-							,allowOutsideClick: true
-						});
+						if (values.onError)
+							values.onError();
 					}
 				}
 			});
@@ -186,7 +227,7 @@ $.fn.ajaxWithSwal = function(uri ,data ,errorText ,onSuccess ,faElem) {
 	catch ($e) {
 		swal({
 			 title            : "Ошибка"
-			,text             : errorText + "\n" + $e
+			,text             : values.errorText + "\n" + $e
 			,type             : "error"
 			,allowOutsideClick: true
 		});
