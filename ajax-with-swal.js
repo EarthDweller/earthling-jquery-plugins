@@ -9,15 +9,15 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 	var values;
 
-	if (typeof uriOrData != "object")
+	if (typeof uriOrData == "object")
+		values = uriOrData;
+	else
 		values = {
 			uri : uriOrData
 		};
-	else
-		values = uriOrData;
 
 
-	if (!uriOrData.uri)
+	if (!values.uri)
 		errors.push("Не указан аргумент «uri»!");
 
 
@@ -30,9 +30,6 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 	if (!(values.data instanceof Object))
 		errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof data);
-
-
-
 
 
 
@@ -202,7 +199,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 						console.log($e);
 
 						errorTitle = "Ошибка";
-						errorText  = "Не удалось обработать ответ от сервера!" + "\n" + $e;
+						errorText  = "Не удалось обработать ответ от сервера!";
 					}
 					finally {
 						faElem.data("jqXHR" ,null);
@@ -225,9 +222,10 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 		}
 	}
 	catch ($e) {
+		console.log($e);
 		swal({
 			 title            : "Ошибка"
-			,text             : values.errorText + "\n" + $e
+			,text             : values.errorText
 			,type             : "error"
 			,allowOutsideClick: true
 		});
