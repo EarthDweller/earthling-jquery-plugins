@@ -18,6 +18,16 @@
     "type": "git",
     "url": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/js-jquery-plugins.git"
   },
+  "ignore": [
+    "/.*",
+    "_config.yml",
+    "CNAME",
+    "composer.json",
+    "CONTRIBUTING.md",
+    "docs",
+    "js/tests",
+    "test-infra"
+  ],
   "devDependencies": {
     "jquery": "~2.1.4",
     "sweetalert": "*"
