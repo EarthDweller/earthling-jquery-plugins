@@ -1,5 +1,5 @@
 /**
- * @copyright 1september 2016 / T-Soloveychik@ya.ru
+ * @copyright 1september 2016
  */
 
 $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
