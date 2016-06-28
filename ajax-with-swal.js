@@ -153,11 +153,12 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 							, text             : data.error
 							, type             : "error"
 							, allowOutsideClick: true
+							, html             : data.swalWithHtml ? true : false
 						});
 					}
 				}
-				catch ($e) {
-					console.log($e);
+				catch (e) {
+					console.log(e);
 					swal({
 						  title            : values.errorTitle
 						, text             : values.errorText
@@ -196,8 +197,8 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 							errorText  = $.parseJSON(XMLHttpRequest.responseText);
 					}
 				}
-				catch ($e) {
-					console.log($e);
+				catch (e) {
+					console.log(e);
 
 					values.errorTitle = "Ошибка";
 					errorText  = "Не удалось обработать ответ от сервера!";
@@ -207,7 +208,12 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 					faElem.attr("class",faElem.data("fa"));
 
-					if (textStatus != "abort" && !values.abort)
+					if (textStatus == "abort" && values.abort)
+					{
+						if (values.onAbort)
+							values.onAbort();
+					}
+					else
 					{
 						swal({
 							  title            : values.errorTitle
@@ -220,14 +226,12 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 							values.onError();
 					}
 
-					if (values.onAbort)
-						values.onAbort();
 				}
 			}
 		});
 	}
-	catch ($e) {
-		console.log($e);
+	catch (e) {
+		console.log(e);
 		swal({
 			  title            : "Ошибка"
 			, text             : values.errorText
