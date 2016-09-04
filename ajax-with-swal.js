@@ -34,7 +34,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 
 	if (!errorText && !values.errorText)
-		errorText  = "Не удалось обработать отправить запрос на сервер";
+		errorText  = "Не удалось отправить запрос на сервер!";
 
 	if (!values.errorText)
 		values.errorText = errorText;
@@ -75,7 +75,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 		if (!values.data)
 			values.data = jElem.serialize();
 
-		var jqXHR = faElem.data("jqXHR");
+		var jqXHR = jElem.data("jqXHR");
 		if (jqXHR && jqXHR.readyState == 1)
 		{
 			if (values.abort)
@@ -130,7 +130,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			, timeout    : (values.timeout ? values.timeout : (50 * 1000)) // 50 секунд
 			, url        : values.uri
 			, beforeSend : function ( jqXHR ) {
-				faElem.data("jqXHR" ,jqXHR);
+				jElem.data("jqXHR" ,jqXHR);
 
 				faElem.data("fa" ,faElem.attr("class"));
 
@@ -138,7 +138,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				faElem.addClass("fa-spin");
 			}
 			, complete   : function () {
-				faElem.data("jqXHR" ,null);
+				jElem.data("jqXHR" ,null);
 
 				faElem.attr("class",faElem.data("fa"));
 			}
@@ -169,33 +169,42 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				finally {
 				}
 			}
-			, error      : function (XMLHttpRequest ,textStatus)
+			, error      : function (XMLHttpRequest ,textStatus )
 			{
 				var errorText  = "Не удалось обработать ответ от сервера!";
+
+				var withOutMessage = true;
 
 				try {
 					switch (textStatus)
 					{
 						case "abort":
+							withOutMessage = true;
 							values.errorTitle = "Отправка остановлена";
 							errorText  = "Отправка запроса была остановлена!";
 							break;
 
 						case "timeout":
+							withOutMessage = true;
 							values.errorTitle = "Сервер не отвечает";
 							errorText  = "Возможно у вас проблемы с интернетом или сервер перегружен!";
 							break;
 
 						case "parsererror":
+							withOutMessage = false;
 							values.errorTitle = "Неправильный формат данных";
 							errorText  = "Данные, полученные от сервера, имеют неправильный формат и не могут быть обработаны!";
 							break;
 
 						case "error":
 						default:
+							withOutMessage = false;
 							values.errorTitle = "Ошибка";
 							errorText  = $.parseJSON(XMLHttpRequest.responseText);
 					}
+
+					if (window.sendError)
+						window.sendError({ajax: XMLHttpRequest} ,errorText ,withOutMessage);
 				}
 				catch (e) {
 					console.log(e);
