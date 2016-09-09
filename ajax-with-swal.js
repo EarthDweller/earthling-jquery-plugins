@@ -198,9 +198,33 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 						case "error":
 						default:
-							withOutMessage = false;
 							values.errorTitle = "Ошибка";
-							errorText  = $.parseJSON(XMLHttpRequest.responseText);
+							switch (+XMLHttpRequest.status)
+							{
+								case 401:
+									withOutMessage = true;
+									errorText = "Нужно авторизоваться";
+									break;
+
+								case 403:
+									withOutMessage = true;
+									errorText = "Доступ к запрашиваемой странице закрыт!";
+									break;
+
+								case 404:
+									withOutMessage = true;
+									errorText = "Запрашиваемый раздел не найден!";
+									break;
+
+								case 500:
+									withOutMessage = false;
+									errorText = "Произошла ошибка при обработке запроса, данные об ошибке отправлены для проверки.";
+									break;
+
+								default:
+									withOutMessage = false;
+									errorText = $.parseJSON(XMLHttpRequest.responseText);
+							}
 					}
 
 					if (window.sendError)
