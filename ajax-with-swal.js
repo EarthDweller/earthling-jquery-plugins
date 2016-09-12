@@ -228,7 +228,11 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 					}
 
 					if (window.sendError)
-						window.sendError({ajax: XMLHttpRequest} ,errorText ,withOutMessage);
+					{
+						var error = new Error();
+						error.data = {ajax: XMLHttpRequest};
+						window.sendError(error ,errorText ,withOutMessage);
+					}
 				}
 				catch (e) {
 					console.log(e);
