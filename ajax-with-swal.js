@@ -14,6 +14,10 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			uri : uriOrData
 		};
 
+	var ajaxHolder = $(this);
+	if (values.ajaxHolder)
+		ajaxHolder = values.ajaxHolder;
+
 	if (values.url)
 		values.uri = values.url;
 
@@ -67,15 +71,13 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 	try
 	{
-		var jElem = $(this);
-
 		if (!faElem)
-			faElem = jElem;
+			faElem = ajaxHolder;
 
 		if (!values.data)
-			values.data = jElem.serialize();
+			values.data = ajaxHolder.serialize();
 
-		var jqXHR = jElem.data("jqXHR");
+		var jqXHR = ajaxHolder.data("jqXHR");
 		if (jqXHR && jqXHR.readyState == 1)
 		{
 			if (values.abort)
@@ -130,15 +132,18 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			, timeout    : (values.timeout ? values.timeout : (50 * 1000)) // 50 секунд
 			, url        : values.uri
 			, beforeSend : function ( jqXHR ) {
-				jElem.data("jqXHR" ,jqXHR);
+				ajaxHolder.data("jqXHR" ,jqXHR);
 
 				faElem.data("fa" ,faElem.attr("class"));
 
 				faElem.attr("class",faElem.attr("class").replace(/(fa fa)-[^\s]+/,"$1-circle-o-notch"));
 				faElem.addClass("fa-spin");
+
+				if (values.beforeSend)
+					values.beforeSend();
 			}
 			, complete   : function () {
-				jElem.data("jqXHR" ,null);
+				ajaxHolder.data("jqXHR" ,null);
 
 				faElem.attr("class",faElem.data("fa"));
 			}
