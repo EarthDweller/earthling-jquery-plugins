@@ -54,8 +54,17 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 	if (!values.onSuccess)
 		values.onSuccess = onSuccess;
 
+
 	if (values.onError && !(values.onError instanceof Function))
 		errors.push("Аргумент «onError» должен быть функцией! Передано: " + typeof values.onError);
+
+
+	if (values.onComplete && !(values.onComplete instanceof Function))
+		errors.push("Аргумент «onComplete» должен быть функцией! Передано: " + typeof values.onComplete);
+
+
+	if (values.beforeSuccess && !(values.beforeSuccess instanceof Function))
+		errors.push("Аргумент «beforeSuccess» должен быть функцией! Передано: " + typeof values.beforeSuccess);
 
 
 	if (!faElem && values.faElem)
@@ -146,9 +155,15 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				ajaxHolder.data("jqXHR" ,null);
 
 				faElem.attr("class",faElem.data("fa"));
+
+				if (values.onComplete)
+					values.onComplete();
 			}
 			, success    : function ( data ) {
 				try {
+					if (values.beforeSuccess)
+						values.beforeSuccess();
+
 					if (data.success) {
 						values.onSuccess(data);
 					}
