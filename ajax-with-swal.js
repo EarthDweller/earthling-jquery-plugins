@@ -168,6 +168,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 						values.onSuccess(data);
 					}
 					else {
+						console.log(data);
 						swal({
 							  title            : values.errorTitle
 							, text             : data.error
@@ -231,7 +232,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 									errorText = "Доступ к запрашиваемой странице закрыт!";
 									break;
 
-								case 404:
+								case 404 && values.with404:
 									withOutMessage = true;
 									errorText = "Запрашиваемый раздел не найден!";
 									break;
