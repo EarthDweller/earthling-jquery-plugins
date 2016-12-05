@@ -147,6 +147,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 				faElem.attr("class",faElem.attr("class").replace(/(fa fa)-[^\s]+/,"$1-circle-o-notch"));
 				faElem.addClass("fa-spin");
+				faElem.addClass("fa-fw");
 
 				if (values.beforeSend)
 					values.beforeSend();
