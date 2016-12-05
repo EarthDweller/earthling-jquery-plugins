@@ -4,7 +4,7 @@
     "description": "jQuery plugins",
     "repository": {
         "type": "git",
-        "url": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/js-jquery-plugins.git"
+        "url": "https://bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git"
     },
     "authors": [
 	    {
