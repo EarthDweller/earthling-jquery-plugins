@@ -1,10 +1,10 @@
 {
     "name": "earthling-jquery-plugins",
     "version": "0.3.11",
-    "description": "jQuery plugin – ajax with Sweet Alert popups for Font Awesome icon",
+    "description": "jQuery plugins",
     "repository": {
         "type": "git",
-        "url": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git"
+        "url": "https://T-Soloveychik@bitbucket.org/T-Soloveychik/js-jquery-plugins.git"
     },
     "authors": [
 	    {
