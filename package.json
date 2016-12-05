@@ -2,14 +2,15 @@
     "name": "earthling-jquery-plugins",
     "version": "0.3.11",
     "description": "jQuery plugins",
+    "homepage": "https://bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git",
     "repository": {
         "type": "git",
-        "url": "https://bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git"
+        "url": "git@bitbucket.org:/T-Soloveychik/earthling-jquery-plugins.git"
     },
     "authors": [
-	    {
-		    "name": "Timofey",
-			"email": "T-Soloveychik@ya.ru"
-		}
+        {
+            "name": "Timofey",
+            "email": "T-Soloveychik@ya.ru"
+        }
     ]
 }
