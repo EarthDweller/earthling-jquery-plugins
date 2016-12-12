@@ -89,46 +89,53 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 		var jqXHR = ajaxHolder.data("jqXHR");
 		if (jqXHR && jqXHR.readyState == 1)
 		{
-			if (values.abort)
-				return jqXHR.abort();
+			if (values.ignore)
+			{
+				if (jqXHR.readyState == 1)
+					jqXHR.abort();
+			}
+			else
+			{
+				if (values.abort)
+					return jqXHR.abort();
 
-			swal({
-					  title             : "Прервать отправку сообщения?"
-					, text              : "Если ответ ещё не получен, то передача запроса будет прервана."
-					, showCancelButton  : true
-					, confirmButtonColor: "#FEAB2E"
-					, confirmButtonText : "Да, прервать!"
-					, cancelButtonText  : "Нет, ждать ответа!"
-					, closeOnConfirm    : false
-					, closeOnCancel     : true
-					, allowOutsideClick : true
-				}
-				,function ( isConfirm ) {
-					if (isConfirm) {
-						if (+jqXHR.readyState != 4) {
-							jqXHR.abort();
-							swal({
-								  title            : "Передача остановлена!"
-								, text             : "Передача прервана на Вашем устройстве."
-								, allowOutsideClick: true
-							});
-						}
-						else {
-							swal({
-								  title            : "Данные уже переданы!"
-								, text             : "Не удалось прервать запрос, так как данные уже отправлены."
-								, allowOutsideClick: true
-							});
-						}
-
-						return false;
+				swal({
+						  title             : "Прервать отправку сообщения?"
+						, text              : "Если ответ ещё не получен, то передача запроса будет прервана."
+						, showCancelButton  : true
+						, confirmButtonColor: "#FEAB2E"
+						, confirmButtonText : "Да, прервать!"
+						, cancelButtonText  : "Нет, ждать ответа!"
+						, closeOnConfirm    : false
+						, closeOnCancel     : true
+						, allowOutsideClick : true
 					}
-				}
-			);
+					,function ( isConfirm ) {
+						if (isConfirm) {
+							if (+jqXHR.readyState != 4) {
+								jqXHR.abort();
+								swal({
+									  title            : "Передача остановлена!"
+									, text             : "Передача прервана на Вашем устройстве."
+									, allowOutsideClick: true
+								});
+							}
+							else {
+								swal({
+									  title            : "Данные уже переданы!"
+									, text             : "Не удалось прервать запрос, так как данные уже отправлены."
+									, allowOutsideClick: true
+								});
+							}
+
+							return false;
+						}
+					}
+				);
+			}
 
 			return false;
 		}
-
 
 		$.ajax({
 			  type       : "POST"
@@ -163,7 +170,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			, success    : function ( data ) {
 				try {
 					if (values.beforeSuccess)
-						values.beforeSuccess();
+						values.beforeSuccess(data);
 
 					if (data.success) {
 						values.onSuccess(data);
@@ -250,13 +257,6 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 									errorText = $.parseJSON(XMLHttpRequest.responseText);
 							}
 					}
-
-					if (window.sendError)
-					{
-						var error = new Error();
-						error.data = {ajax: XMLHttpRequest};
-						window.sendError(error ,errorText ,withOutMessage);
-					}
 				}
 				catch (e) {
 					console.log(e);
@@ -269,13 +269,20 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 					faElem.attr("class",faElem.data("fa"));
 
-					if (textStatus == "abort" && values.abort)
+					if (textStatus == "abort" && (values.abort || values.ignore))
 					{
 						if (values.onAbort)
 							values.onAbort();
 					}
 					else
 					{
+						if (window.sendError)
+						{
+							var error = new Error();
+							error.data = {ajax: XMLHttpRequest};
+							window.sendError(error ,errorText ,withOutMessage);
+						}
+
 						swal({
 							  title            : values.errorTitle
 							, text             : errorText
