@@ -167,23 +167,30 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				if (values.onComplete)
 					values.onComplete();
 			}
-			, success    : function ( data ) {
+			, success    : function ( response ) {
 				try {
 					if (values.beforeSuccess)
-						values.beforeSuccess(data);
+						values.beforeSuccess(response);
 
-					if (data.success) {
-						values.onSuccess(data);
+					if (response.success) {
+						values.onSuccess(response);
 					}
 					else {
-						console.log(data);
-						swal({
-							  title            : values.errorTitle
-							, text             : data.error
-							, type             : "error"
-							, allowOutsideClick: true
-							, html             : data.swalWithHtml ? true : false
-						});
+
+						if (values.onResponseWithError)
+							values.onResponseWithError(response);
+
+						else
+						{
+							console.log(response);
+							swal({
+								  title            : values.errorTitle
+								, text             : response.error
+								, type             : "error"
+								, allowOutsideClick: true
+								, html             : response.swalWithHtml ? true : false
+							});
+						}
 					}
 				}
 				catch (e) {
