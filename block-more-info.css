@@ -1,0 +1,39 @@
+.block-more-info {
+  opacity: 1;
+  overflow: hidden;
+  -webkit-transition: opacity 0.75s 0.75s, height 0.75s, margin 0.75s, border-color 0.75s, background-color 0.75s;
+  -moz-transition: opacity 0.75s 0.75s, height 0.75s, margin 0.75s, border-color 0.75s, background-color 0.75s;
+  transition: opacity 0.75s 0.75s, height 0.75s, margin 0.75s, border-color 0.75s, background-color 0.75s;
+  cursor: pointer;
+}
+.block-more-info > div {
+  padding: 1px;
+  cursor: default;
+}
+.block-more-info.block-more-info-with-border {
+  margin-left: 0.8em;
+  padding-left: 0.8em;
+  border-left: 1px solid #F5F5F5;
+}
+.block-more-info.block-more-info-with-border:hover {
+  border-color: #E29E72;
+}
+.block-more-info.block-more-info-with-border:after {
+  background-color: red;
+  display: block;
+}
+.block-more-info.block-more-info-with-border > div {
+  padding-left: 0.5em;
+  cursor: default;
+}
+.block-more-info.block-more-info-show {
+  margin-top: 1.5em;
+}
+.block-more-info.block-more-info-hidden {
+  opacity: 0;
+  height: 0;
+  margin: 0;
+  -webkit-transition: opacity 0.45s, height 0.45s 0.45s, margin 0.45s 0.45s;
+  -moz-transition: opacity 0.45s, height 0.45s 0.45s, margin 0.45s 0.45s;
+  transition: opacity 0.45s, height 0.45s 0.45s, margin 0.45s 0.45s;
+}

@@ -1,0 +1,61 @@
+.transitional(@prop...) {
+	@string: "";
+	.collect-prop(@i: 1 ,@prop ,@string) when (@i =< length(@prop)) {
+		-webkit-transition+: extract(@prop ,@i);
+		-moz-transition+: extract(@prop ,@i);
+		transition+: extract(@prop ,@i);
+		
+		.collect-prop((@i + 1) ,@prop ,@string);
+	}
+	.collect-prop(1 ,@prop ,@string);
+}
+
+.block-more-info {
+	opacity: 1;
+	overflow: hidden;
+	@timing: 0.75s;
+	@wait: @timing;
+	.transitional(opacity @timing @wait ,height @timing ,margin @timing ,border-color @timing ,background-color @timing);
+	
+	cursor: pointer;
+	
+	> div {
+		padding: 1px;
+		cursor: default;
+	}
+	
+	&&-with-border {
+		margin-left: 0.8em;
+		padding-left: 0.8em;
+		border-left: 1px solid #F5F5F5;
+		
+		&:hover {
+			@color: #E29E72;
+			border-color: @color;
+		}
+		
+		&:after {
+			background-color: red;
+			display: block;
+		}
+		
+		> div {
+			padding-left: 0.5em;
+			cursor: default;
+		}
+	}
+	
+	&&-show {
+		margin-top: 1.5em;
+	}
+	
+	&&-hidden {
+		opacity: 0;
+		height: 0;
+		margin: 0;
+		
+		@timing: 0.45s;
+		@wait: @timing;
+		.transitional(opacity @timing ,height @timing @wait ,margin @timing @wait);
+	}
+}
