@@ -184,7 +184,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 						{
 							console.log(response);
 							swal({
-								  title            : values.errorTitle
+								  title            : response.hasOwnProperty("errorTitle") ? response.errorTitle : values.errorTitle
 								, text             : response.error
 								, type             : "error"
 								, allowOutsideClick: true
