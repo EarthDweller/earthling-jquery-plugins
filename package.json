@@ -2,10 +2,10 @@
     "name": "earthling-jquery-plugins",
     "version": "0.3.16",
     "description": "jQuery plugins",
-    "homepage": "https://bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git",
+    "homepage": "https://github.com/EarthDweller/earthling-jquery-plugins",
     "repository": {
         "type": "git",
-        "url": "git@bitbucket.org:/T-Soloveychik/earthling-jquery-plugins.git"
+        "url": "git@github.com:EarthDweller/earthling-jquery-plugins.git"
     },
     "authors": [
         {

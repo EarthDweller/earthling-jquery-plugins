@@ -1,6 +1,6 @@
 {
   "name": "earthling-jquery-plugins",
-  "homepage": "https://bitbucket.org/T-Soloveychik/earthling-jquery-plugins.git",
+  "homepage": "https://github.com/EarthDweller/earthling-jquery-plugins",
   "authors": [
     {
       "name": "Timofey",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git@bitbucket.org:/T-Soloveychik/earthling-jquery-plugins.git"
+    "url": "git@github.com:EarthDweller/earthling-jquery-plugins.git"
   },
   "ignore": [
     "/.*",
