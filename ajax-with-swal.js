@@ -1,5 +1,5 @@
 /**
- * @copyright 1september 2016
+ * @copyright 1september 2019
  */
 
 $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
@@ -70,6 +70,13 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 	if (!faElem && values.faElem)
 		faElem = values.faElem;
 
+	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
+	if (!faElem.length)
+		faElem = this.find("svg");
+
+	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
+	if (!faElem.length)
+        errors.push("Аргумент «faElem» не найден, ни  элемент «i», ни элемент «svg»!");
 
 	if (errors.length)
 		return swal({
