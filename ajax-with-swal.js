@@ -82,7 +82,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
     }
 
     // Если fontawesome в span, который будет родителем:
-    if (faElem.prop("tagName") == "SVG" || isSVG)
+    if (faElem.prop("tagName").match(/svg/i) || isSVG)
     {
         isSVG = true;
         faSpinClassName = "-circle-notch";
@@ -175,10 +175,10 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			, beforeSend : function ( jqXHR ) {
 				ajaxHolder.data("jqXHR" ,jqXHR);
 
-				faElem.data("fa" ,faElem.attr("class"));
-
 				var elemToSpin = faElem;
-				if (isSVG)
+				if (!isSVG)
+					faElem.data("fa" ,faElem.attr("class"));
+				else
                 {
                     elemToSpin = faElem.clone();
                     faElem.replaceWith(elemToSpin);
