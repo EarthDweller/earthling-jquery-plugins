@@ -76,10 +76,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
 	if (!faElem.length)
-    {
-        isSVG = true;
 		faElem = this.find("svg:first");
-    }
 
     // Если fontawesome в span, который будет родителем:
     if (faElem.prop("tagName").match(/svg/i) || isSVG)
