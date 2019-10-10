@@ -188,7 +188,8 @@ $.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 				if (options.beforeSend)
 					options.beforeSend();
 			}
-			, complete   : function () {
+
+			, complete: function () {
 				ajaxHolder.data("jqXHR" ,null);
 
 				if (!isSVG)
@@ -199,7 +200,8 @@ $.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 				if (options.onComplete)
 					options.onComplete();
 			}
-			, success    : function ( response ) {
+
+			, success: function ( response ) {
 				try {
 					if (options.beforeSuccess)
 						options.beforeSuccess(response);
@@ -237,7 +239,8 @@ $.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 				finally {
 				}
 			}
-			, error      : function (XMLHttpRequest ,textStatus )
+
+			, error: function (XMLHttpRequest ,textStatus )
 			{
 				var errorText  = "Не удалось обработать ответ от сервера!";
 
