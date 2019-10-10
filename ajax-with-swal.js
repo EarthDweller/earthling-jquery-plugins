@@ -2,77 +2,77 @@
  * @copyright 1september 2019
  */
 
-$.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
+$.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 	var errors = [];
 
 	var isSVG = false;
 	var parent = null;
 	var faSpinClassName = "-circle-o-notch";
 
-	var values;
+	var options;
 
-	if (typeof uriOrData == "object")
-		values = uriOrData;
+	if (typeof uriOrOptions == "object")
+		options = uriOrOptions;
 	else
-		values = {
-			uri : uriOrData
+		options = {
+			uri : uriOrOptions
 		};
 
 	var ajaxHolder = $(this);
-	if (values.ajaxHolder)
-		ajaxHolder = values.ajaxHolder;
+	if (options.ajaxHolder)
+		ajaxHolder = options.ajaxHolder;
 
-	if (values.url)
-		values.uri = values.url;
+	if (options.url)
+		options.uri = options.url;
 
-	if (!values.uri)
+	if (!options.uri)
 		errors.push("Не указан аргумент «uri»!");
 
-	if (!data && !values.data)
+	if (!data && !options.data)
 		errors.push("Не указан аргумент «data»!");
 
-	if (data && !values.data)
-		values.data = data;
+	if (data && !options.data)
+		options.data = data;
 
-	if (!(values.data instanceof Object))
+	if (!(options.data instanceof Object))
 		errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof data);
 
-	if (!values.errorTitle)
-		values.errorTitle = "Ошибка";
+	if (!options.errorTitle)
+		options.errorTitle = "Ошибка";
 
 
-	if (!errorText && !values.errorText)
+	if (!errorText && !options.errorText)
 		errorText  = "Не удалось отправить запрос на сервер!";
 
-	if (!values.errorText)
-		values.errorText = errorText;
+	if (!options.errorText)
+		options.errorText = errorText;
 
 
 
-	if (!onSuccess && !values.onSuccess)
+	if (!onSuccess && !options.onSuccess)
 		errors.push("Не указан аргумент «onSuccess»!");
 
-	if (!(onSuccess instanceof Function) && !(values.onSuccess && values.onSuccess instanceof Function))
+	if (!(onSuccess instanceof Function) && !(options.onSuccess && options.onSuccess instanceof Function))
 		errors.push("Аргумент «onSuccess» должен быть функцией! Передано: " + typeof onSuccess);
 
-	if (!values.onSuccess)
-		values.onSuccess = onSuccess;
+	if (!options.onSuccess)
+		options.onSuccess = onSuccess;
 
 
-	if (values.onError && !(values.onError instanceof Function))
-		errors.push("Аргумент «onError» должен быть функцией! Передано: " + typeof values.onError);
+	if (options.onError && !(options.onError instanceof Function))
+		errors.push("Аргумент «onError» должен быть функцией! Передано: " + typeof options.onError);
 
 
-	if (values.onComplete && !(values.onComplete instanceof Function))
-		errors.push("Аргумент «onComplete» должен быть функцией! Передано: " + typeof values.onComplete);
+	if (options.onComplete && !(options.onComplete instanceof Function))
+		errors.push("Аргумент «onComplete» должен быть функцией! Передано: " + typeof options.onComplete);
 
 
-	if (values.beforeSuccess && !(values.beforeSuccess instanceof Function))
-		errors.push("Аргумент «beforeSuccess» должен быть функцией! Передано: " + typeof values.beforeSuccess);
+	if (options.beforeSuccess && !(options.beforeSuccess instanceof Function))
+		errors.push("Аргумент «beforeSuccess» должен быть функцией! Передано: " + typeof options.beforeSuccess);
 
 
-	if (!faElem && values.faElem)
-		faElem = values.faElem;
+	if (!faElem && options.faElem)
+		faElem = options.faElem;
 
 	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
 	if (!faElem.length)
@@ -105,20 +105,20 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 		if (!faElem)
 			faElem = ajaxHolder;
 
-		if (!values.data)
-			values.data = ajaxHolder.serialize();
+		if (!options.data)
+			options.data = ajaxHolder.serialize();
 
 		var jqXHR = ajaxHolder.data("jqXHR");
 		if (jqXHR && jqXHR.readyState == 1)
 		{
-			if (values.ignore)
+			if (options.ignore)
 			{
 				if (jqXHR.readyState == 1)
 					jqXHR.abort();
 			}
 			else
 			{
-				if (values.abort)
+				if (options.abort)
 					return jqXHR.abort();
 
 				swal({
@@ -163,12 +163,12 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			  type       : "POST"
 			, dataType   : "json"
 			, context    : faElem
-			, data       : values.data
+			, data       : options.data
 			, cache      : false
-			, processData: (values.data.constructor != FormData)
-			, contentType: (values.data.constructor != FormData ? "application/x-www-form-urlencoded; charset=UTF-8" : false)
-			, timeout    : (values.timeout ? values.timeout : (50 * 1000)) // 50 секунд
-			, url        : values.uri
+			, processData: (options.data.constructor != FormData)
+			, contentType: (options.data.constructor != FormData ? "application/x-www-form-urlencoded; charset=UTF-8" : false)
+			, timeout    : (options.timeout ? options.timeout : (50 * 1000)) // 50 секунд
+			, url        : options.uri
 			, beforeSend : function ( jqXHR ) {
 				ajaxHolder.data("jqXHR" ,jqXHR);
 
@@ -185,8 +185,8 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				elemToSpin.addClass("fa-fw");
 				elemToSpin.addClass("fa-spin");
 
-				if (values.beforeSend)
-					values.beforeSend();
+				if (options.beforeSend)
+					options.beforeSend();
 			}
 			, complete   : function () {
 				ajaxHolder.data("jqXHR" ,null);
@@ -196,27 +196,27 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				else
 					parent.find("svg").replaceWith(faElem);
 
-				if (values.onComplete)
-					values.onComplete();
+				if (options.onComplete)
+					options.onComplete();
 			}
 			, success    : function ( response ) {
 				try {
-					if (values.beforeSuccess)
-						values.beforeSuccess(response);
+					if (options.beforeSuccess)
+						options.beforeSuccess(response);
 
 					if (response.success) {
-						values.onSuccess(response);
+						options.onSuccess(response);
 					}
 					else {
 
-						if (values.onResponseWithError)
-							values.onResponseWithError(response);
+						if (options.onResponseWithError)
+							options.onResponseWithError(response);
 
 						else
 						{
 							console.log(response);
 							swal({
-								  title            : response.hasOwnProperty("errorTitle") ? response.errorTitle : values.errorTitle
+								  title            : response.hasOwnProperty("errorTitle") ? response.errorTitle : options.errorTitle
 								, text             : response.error
 								, type             : typeof response.swalType === "string" ? response.swalType : "error"
 								, allowOutsideClick: true
@@ -228,8 +228,8 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				catch (e) {
 					console.log(e);
 					swal({
-						  title            : values.errorTitle
-						, text             : values.errorText
+						  title            : options.errorTitle
+						, text             : options.errorText
 						, type             : "error"
 						, allowOutsideClick: true
 					});
@@ -248,25 +248,25 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 					{
 						case "abort":
 							withOutMessage = true;
-							values.errorTitle = "Отправка остановлена";
+							options.errorTitle = "Отправка остановлена";
 							errorText  = "Отправка запроса была остановлена!";
 							break;
 
 						case "timeout":
 							withOutMessage = true;
-							values.errorTitle = "Сервер не отвечает";
+							options.errorTitle = "Сервер не отвечает";
 							errorText  = "Возможно у вас проблемы с интернетом или сервер перегружен!";
 							break;
 
 						case "parsererror":
 							withOutMessage = false;
-							values.errorTitle = "Неправильный формат данных";
+							options.errorTitle = "Неправильный формат данных";
 							errorText  = "Данные, полученные от сервера, имеют неправильный формат и не могут быть обработаны!";
 							break;
 
 						case "error":
 						default:
-							values.errorTitle = "Ошибка";
+							options.errorTitle = "Ошибка";
 							switch (+XMLHttpRequest.status)
 							{
 								case 401:
@@ -282,7 +282,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 								case 404:
 									withOutMessage = false;
 									errorText = "При отправке запроса произошла ошибка!";
-									if (values.with404)
+									if (options.with404)
 										errorText = "Запрашиваемый раздел не найден!";
 									break;
 
@@ -300,7 +300,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				catch (e) {
 					console.log(e);
 
-					values.errorTitle = "Ошибка";
+					options.errorTitle = "Ошибка";
 					errorText  = "Не удалось обработать ответ от сервера!";
 				}
 				finally {
@@ -313,8 +313,8 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 
 					if (textStatus === "abort" && (values.abort || values.ignore))
 					{
-						if (values.onAbort)
-							values.onAbort();
+						if (options.onAbort)
+							options.onAbort();
 					}
 					else
 					{
@@ -326,14 +326,14 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 						}
 
 						swal({
-							  title            : values.errorTitle
+							  title            : options.errorTitle
 							, text             : errorText
 							, type             : "error"
 							, allowOutsideClick: true
 						});
 
-						if (values.onError)
-							values.onError();
+						if (options.onError)
+							options.onError();
 					}
 
 				}
@@ -344,7 +344,7 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 		console.log(e);
 		swal({
 			  title            : "Ошибка"
-			, text             : values.errorText
+			, text             : options.errorText
 			, type             : "error"
 			, allowOutsideClick: true
 		});
