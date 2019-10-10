@@ -78,20 +78,20 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 	if (!faElem.length)
 		faElem = this.find("svg:first");
 
-    // Если fontawesome в span, который будет родителем:
-    if (faElem.prop("tagName").match(/svg/i) || isSVG)
-    {
-        isSVG = true;
-        faSpinClassName = "-circle-notch";
-        // обернуть fontawesome – это SVG элемент:
-        parent = $("<span></span>");
-        faElem.after(parent);
-        parent.append(faElem);
-    }
+	// Если fontawesome в span, который будет родителем:
+	if (faElem.prop("tagName").match(/svg/i) || isSVG)
+	{
+		isSVG = true;
+		faSpinClassName = "-circle-notch";
+		// обернуть fontawesome – это SVG элемент:
+		parent = $("<span></span>");
+		faElem.after(parent);
+		parent.append(faElem);
+	}
 
 	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
 	if (!faElem.length)
-        errors.push("Аргумент «faElem» не найден, ни  элемент «i», ни элемент «svg»!");
+		errors.push("Аргумент «faElem» не найден, ни  элемент «i», ни элемент «svg»!");
 
 	if (errors.length)
 		return swal({
@@ -176,14 +176,14 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				if (!isSVG)
 					faElem.data("fa" ,faElem.attr("class"));
 				else
-                {
-                    elemToSpin = faElem.clone();
-                    faElem.replaceWith(elemToSpin);
-                }
+				{
+					elemToSpin = faElem.clone();
+					faElem.replaceWith(elemToSpin);
+				}
 
-                elemToSpin.attr("class",elemToSpin.attr("class").replace(/(fa[srl]?\s*fa)-[^\s]+/,"$1" + faSpinClassName));
-                elemToSpin.addClass("fa-fw");
-                elemToSpin.addClass("fa-spin");
+				elemToSpin.attr("class",elemToSpin.attr("class").replace(/(fa[srl]?\s*fa)-[^\s]+/,"$1" + faSpinClassName));
+				elemToSpin.addClass("fa-fw");
+				elemToSpin.addClass("fa-spin");
 
 				if (values.beforeSend)
 					values.beforeSend();
@@ -191,10 +191,10 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 			, complete   : function () {
 				ajaxHolder.data("jqXHR" ,null);
 
-                if (!isSVG)
-				    faElem.attr("class",faElem.data("fa"));
-                else
-                    parent.find("svg").replaceWith(faElem);
+				if (!isSVG)
+					faElem.attr("class",faElem.data("fa"));
+				else
+					parent.find("svg").replaceWith(faElem);
 
 				if (values.onComplete)
 					values.onComplete();
@@ -306,10 +306,10 @@ $.fn.ajaxWithSwal = function(uriOrData ,data ,errorText ,onSuccess ,faElem) {
 				finally {
 					faElem.data("jqXHR" ,null);
 
-                    if (!isSVG)
-                        faElem.attr("class",faElem.data("fa"));
-                    else
-                        parent.find("svg").replaceWith(faElem);
+					if (!isSVG)
+						faElem.attr("class",faElem.data("fa"));
+					else
+						parent.find("svg").replaceWith(faElem);
 
 					if (textStatus === "abort" && (values.abort || values.ignore))
 					{
