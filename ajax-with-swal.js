@@ -74,6 +74,17 @@ $.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 	if (!faElem && options.faElem)
 		faElem = options.faElem;
 
+	// Если сам элемент хранения запроса и есть иконка FA:
+	if (!faElem && ajaxHolder.hasClass("fa"))
+		faElem = ajaxHolder;
+
+	if (!faElem)
+		return swal({
+			  title             : "Запрос не отправлен!"
+			, text              : "Произошла ошибка, напишите в службу поддержки!"
+			, allowOutsideClick : true
+		});
+
 	// В fontawesome теперь элемент «i» заменяется на элемент «svg»:
 	if (!faElem.length)
 		faElem = this.find("svg:first");
@@ -102,9 +113,6 @@ $.fn.ajaxWithSwal = function(uriOrOptions ,data ,errorText ,onSuccess ,faElem) {
 
 	try
 	{
-		if (!faElem)
-			faElem = ajaxHolder;
-
 		if (!options.data)
 			options.data = ajaxHolder.serialize();
 
