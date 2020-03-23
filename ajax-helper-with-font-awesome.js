@@ -7,11 +7,11 @@
  * @param {string|null}   [options.uri] @deprecated
  * @param {Object}        options.data Передаваемые данные в видео объекта с полями или пустой объект
  *
- * @param {Node|null}     [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
- * @param {Node|null}     [options.faElem] @deprecated
+ * @param {Object|null}   [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
+ * @param {Object|null}   [options.faElem] @deprecated
  *
- * @param {Node|null}     [options.$ajaxHolder] Элемент, на котором выполняется запрос
- * @param {Node|null}     [options.ajaxHolder] @deprecated
+ * @param {Object|null}   [options.$ajaxHolder] Элемент, на котором выполняется запрос
+ * @param {Object|null}   [options.ajaxHolder] @deprecated
  *
  * @param {string|null}   [options.errorTitle] Текст подписи на случай ошибки
  * @param {string|null}   [options.errorText]  Текст сообщения на случай ошибки
