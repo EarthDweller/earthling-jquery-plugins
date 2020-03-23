@@ -3,25 +3,24 @@
  */
 
 /**
- * @param {Node}          options.$ajaxHolder
- * @param {Node}          [options.ajaxHolder] @deprecated
+ * @param {string}        options.url  Адрес страницы
+ * @param {Object}        options.data Передаваемые данные в видео объекта с полями или пустой объект
  *
- * @param {string}        options.url
- * @param {Object}        options.data
- *
- * @param {string}        [options.uri] @deprecated
- * @param {string}        [options.errorTitle]
- * @param {string}        [options.errorText]
- * @param {string}        [options.text]
- *
- * @param {Number}        [options.timeout]
- *
- * @param {Node}          [options.$faElem]
+ * @param {Node}          [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
  * @param {Node}          [options.faElem] @deprecated
  *
- * @param {boolean}       [options.ignore]
- * @param {boolean}       [options.abort]
- * @param {boolean}       [options.with404]
+ * @param {Node}          [options.$ajaxHolder] Элемент, на котором выполняется запрос
+ * @param {Node}          [options.ajaxHolder] @deprecated
+ *
+ * @param {string}        [options.uri] @deprecated
+ * @param {string}        [options.errorTitle] Текст подписи на случай ошибки
+ * @param {string}        [options.errorText]  Текст сообщения на случай ошибки
+ *
+ * @param {Number}        [options.timeout] Время на запрос до авто-обрыва
+ *
+ * @param {boolean}       [options.ignore]  Не обращая внимание на идущий запрос прервать его
+ * @param {boolean}       [options.abort]   Если есть идущий запрос, то уточнить, прервать ли его
+ * @param {boolean}       [options.with404] Если 404, то писать вместо ошибки, что страница не найдена
  *
  * @param {null|Function} [options.beforeSend]
  * @param {null|Function} [options.beforeSuccess]
@@ -39,7 +38,7 @@ $.fn.ajaxHelper = function(options) {
     let faSpinClassName = "-circle-o-notch";
 
     let $ajaxHolder = $(this);
-    if (options.$ajaxHolder)
+    if (options.$ajaxHolder || options.ajaxHolder)
         $ajaxHolder = options.$ajaxHolder || options.ajaxHolder;
 
     if (options.url)
@@ -49,13 +48,10 @@ $.fn.ajaxHelper = function(options) {
         errors.push("Не указан аргумент «uri»!");
 
     if (!(options.data instanceof Object))
-        errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof data);
+        errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof options.data);
 
     if (!options.errorTitle)
         options.errorTitle = "Ошибка";
-
-    if (options.text)
-        options.body = options.text;
 
     if (!options.errorText)
         options.errorText = "Не удалось отправить запрос на сервер!";
