@@ -27,8 +27,8 @@
  * @param {null|Function} [options.beforeSuccess]
  * @param {null|Function} [options.onSuccess]
  * @param {null|Function} [options.onComplete]
- * @param {null|Function} [options.onError]
  * @param {null|Function} [options.onResponseWithError]
+ * @param {null|Function} [options.onError]
  * @param {null|Function} [options.onAbort]
  */
 $.fn.ajaxHelper = function(options) {
