@@ -84,7 +84,7 @@ $.fn.ajaxHelper = function(options) {
         $faElem = $ajaxHolder.find("svg:first");
 
     // Если fontawesome в span, который будет родителем:
-    if ($faElem && $faElem.prop("tagName").match(/svg/i) || isSVG)
+    if ($faElem.length && $faElem.prop("tagName").match(/svg/i) || isSVG)
     {
         isSVG = true;
         faSpinClassName = "-circle-notch";
