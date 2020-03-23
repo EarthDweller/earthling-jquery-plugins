@@ -2,6 +2,35 @@
  * @copyright 1september 2019
  */
 
+/**
+ * @param {Node}          options.$ajaxHolder
+ * @param {Node}          [options.ajaxHolder] @deprecated
+ *
+ * @param {string}        options.url
+ * @param {string}        [options.uri] @deprecated
+ * @param {string}        options.errorTitle
+ * @param {string}        options.errorText
+ * @param {string}        options.text
+ *
+ * @param {Number}        [options.timeout]
+ *
+ * @param {Object}        options.data
+ *
+ * @param {Node}          [options.$faElem]
+ * @param {Node}          [options.faElem] @deprecated
+ *
+ * @param {boolean}       [options.ignore]
+ * @param {boolean}       [options.abort]
+ * @param {boolean}       [options.with404]
+ *
+ * @param {null|Function} [options.beforeSend]
+ * @param {null|Function} [options.beforeSuccess]
+ * @param {null|Function} [options.onSuccess]
+ * @param {null|Function} [options.onComplete]
+ * @param {null|Function} [options.onError]
+ * @param {null|Function} [options.onResponseWithError]
+ * @param {null|Function} [options.onAbort]
+ */
 $.fn.ajaxHelper = function(options) {
     let errors = [];
 
@@ -9,9 +38,9 @@ $.fn.ajaxHelper = function(options) {
     let parent = null;
     let faSpinClassName = "-circle-o-notch";
 
-    let ajaxHolder = $(this);
-    if (options.ajaxHolder)
-        ajaxHolder = options.ajaxHolder;
+    let $ajaxHolder = $(this);
+    if (options.$ajaxHolder)
+        $ajaxHolder = options.$ajaxHolder || options.ajaxHolder;
 
     if (options.url)
         options.uri = options.url;
@@ -46,29 +75,32 @@ $.fn.ajaxHelper = function(options) {
     if (options.beforeSuccess && !(options.beforeSuccess instanceof Function))
         errors.push("Аргумент «beforeSuccess» должен быть функцией! Передано: " + (typeof options.beforeSuccess));
 
-    let faElem = options.faElem;
+    let $faElem = options.faElem;
 
-    if (!faElem)
-        faElem = ajaxHolder;
+    if (!$faElem)
+        $faElem = options.$faElem;
+
+    if (!$faElem)
+        $faElem = $ajaxHolder;
 
     // В fontawesome теперь элемент «i» заменяется на элемент «svg»:
-    if (!faElem.length)
-        faElem = this.find("svg:first");
+    if (!$faElem.length)
+        $faElem = this.find("svg:first");
 
     // Если fontawesome в span, который будет родителем:
-    if (faElem.prop("tagName").match(/svg/i) || isSVG)
+    if ($faElem && $faElem.prop("tagName").match(/svg/i) || isSVG)
     {
         isSVG = true;
         faSpinClassName = "-circle-notch";
         // обернуть fontawesome – это SVG элемент:
         parent = $("<span></span>");
-        faElem.after(parent);
-        parent.append(faElem);
+        $faElem.after(parent);
+        parent.append($faElem);
     }
 
     // В fontawesome теперь элемент «i» заменяется на элемент «svg»:
-    if (!faElem.length)
-        errors.push("Аргумент «faElem» не найден, ни  элемент «i», ни элемент «svg»!");
+    if (!$faElem.length)
+        errors.push("Аргумент «$faElem» не найден, ни  элемент «i», ни элемент «svg»!");
 
     if (errors.length)
     {
@@ -85,9 +117,9 @@ $.fn.ajaxHelper = function(options) {
     try
     {
         if (!options.data)
-            options.data = ajaxHolder.serialize();
+            options.data = $ajaxHolder.serialize();
 
-        let jqXHR = ajaxHolder.data("jqXHR");
+        let jqXHR = $ajaxHolder.data("jqXHR");
         if (jqXHR && jqXHR.readyState === 1)
         {
             if (options.ignore)
@@ -134,7 +166,7 @@ $.fn.ajaxHelper = function(options) {
         $.ajax({
               type       : "POST"
             , dataType   : "json"
-            , context    : faElem
+            , context    : $faElem
             , data       : options.data
             , cache      : false
             , processData: (options.data.constructor !== FormData)
@@ -142,32 +174,32 @@ $.fn.ajaxHelper = function(options) {
             , timeout    : (options.timeout ? options.timeout : (50 * 1000)) // 50 секунд
             , url        : options.uri
             , beforeSend : function ( jqXHR ) {
-                ajaxHolder.data("jqXHR" ,jqXHR);
+                $ajaxHolder.data("jqXHR" ,jqXHR);
 
-                let elemToSpin = faElem;
+                let $elemToSpin = $faElem;
                 if (!isSVG)
-                    faElem.data("fa" ,faElem.attr("class"));
+                    $faElem.data("fa" ,$faElem.attr("class"));
                 else
                 {
-                    elemToSpin = faElem.clone();
-                    faElem.replaceWith(elemToSpin);
+                    $elemToSpin = $faElem.clone();
+                    $faElem.replaceWith($elemToSpin);
                 }
 
-                elemToSpin.attr("class",elemToSpin.attr("class").replace(/(fa[srl]?\s*fa)-[^\s]+/,"$1" + faSpinClassName));
-                elemToSpin.addClass("fa-fw");
-                elemToSpin.addClass("fa-spin");
+                $elemToSpin.attr("class",$elemToSpin.attr("class").replace(/(fa[srl]?\s*fa)-[^\s]+/,"$1" + faSpinClassName));
+                $elemToSpin.addClass("fa-fw");
+                $elemToSpin.addClass("fa-spin");
 
                 if (options.beforeSend)
                     options.beforeSend();
             }
 
             , complete: function () {
-                ajaxHolder.data("jqXHR" ,null);
+                $ajaxHolder.data("jqXHR" ,null);
 
                 if (!isSVG)
-                    faElem.attr("class",faElem.data("fa"));
+                    $faElem.attr("class",$faElem.data("fa"));
                 else
-                    parent.find("svg").replaceWith(faElem);
+                    parent.find("svg").replaceWith($faElem);
 
                 if (options.onComplete)
                     options.onComplete();
@@ -282,12 +314,12 @@ $.fn.ajaxHelper = function(options) {
                 }
                 finally
                 {
-                    faElem.data("jqXHR" ,null);
+                    $faElem.data("jqXHR" ,null);
 
                     if (!isSVG)
-                        faElem.attr("class",faElem.data("fa"));
+                        $faElem.attr("class",$faElem.data("fa"));
                     else
-                        parent.find("svg").replaceWith(faElem);
+                        parent.find("svg").replaceWith($faElem);
 
                     if (textStatus === "abort" && (options.abort || options.ignore))
                     {
