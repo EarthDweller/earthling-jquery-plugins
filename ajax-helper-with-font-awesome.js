@@ -4,31 +4,31 @@
 
 /**
  * @param {string}        options.url  Адрес страницы
+ * @param {string|null}   [options.uri] @deprecated
  * @param {Object}        options.data Передаваемые данные в видео объекта с полями или пустой объект
  *
- * @param {Node}          [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
- * @param {Node}          [options.faElem] @deprecated
+ * @param {Node|null}     [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
+ * @param {Node|null}     [options.faElem] @deprecated
  *
- * @param {Node}          [options.$ajaxHolder] Элемент, на котором выполняется запрос
- * @param {Node}          [options.ajaxHolder] @deprecated
+ * @param {Node|null}     [options.$ajaxHolder] Элемент, на котором выполняется запрос
+ * @param {Node|null}     [options.ajaxHolder] @deprecated
  *
- * @param {string}        [options.uri] @deprecated
- * @param {string}        [options.errorTitle] Текст подписи на случай ошибки
- * @param {string}        [options.errorText]  Текст сообщения на случай ошибки
+ * @param {string|null}   [options.errorTitle] Текст подписи на случай ошибки
+ * @param {string|null}   [options.errorText]  Текст сообщения на случай ошибки
  *
- * @param {Number}        [options.timeout] Время на запрос до авто-обрыва
+ * @param {Number|null}   [options.timeout] Время на запрос до авто-обрыва
  *
- * @param {boolean}       [options.ignore]  Не обращая внимание на идущий запрос прервать его
- * @param {boolean}       [options.abort]   Если есть идущий запрос, то уточнить, прервать ли его
- * @param {boolean}       [options.with404] Если 404, то писать вместо ошибки, что страница не найдена
+ * @param {boolean|null}  [options.ignore]  Не обращая внимание на идущий запрос прервать его
+ * @param {boolean|null}  [options.abort]   Если есть идущий запрос, то уточнить, прервать ли его
+ * @param {boolean|null}  [options.with404] Если 404, то писать вместо ошибки, что страница не найдена
  *
- * @param {null|Function} [options.beforeSend]
- * @param {null|Function} [options.beforeSuccess]
- * @param {null|Function} [options.onSuccess]
- * @param {null|Function} [options.onComplete]
- * @param {null|Function} [options.onResponseWithError]
- * @param {null|Function} [options.onError]
- * @param {null|Function} [options.onAbort]
+ * @param {null|Function} [options.beforeSend]          Выполнится до отправки
+ * @param {null|Function} [options.beforeSuccess]       Выполнится до обработки удачного ответа
+ * @param {null|Function} [options.onSuccess]           Обработка удачного ответа
+ * @param {null|Function} [options.onComplete]          После любого ответа
+ * @param {null|Function} [options.onResponseWithError] После ответа с указанием ошибки
+ * @param {null|Function} [options.onError]             При возникновении ошибки в процессе отправки запроса или обработки ответа
+ * @param {null|Function} [options.onAbort]             В случае непредвиденного завершения запроса браузером
  */
 $.fn.ajaxHelper = function(options) {
     let errors = [];
