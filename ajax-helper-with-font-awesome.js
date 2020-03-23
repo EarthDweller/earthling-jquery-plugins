@@ -7,14 +7,14 @@
  * @param {Node}          [options.ajaxHolder] @deprecated
  *
  * @param {string}        options.url
+ * @param {Object}        options.data
+ *
  * @param {string}        [options.uri] @deprecated
- * @param {string}        options.errorTitle
- * @param {string}        options.errorText
- * @param {string}        options.text
+ * @param {string}        [options.errorTitle]
+ * @param {string}        [options.errorText]
+ * @param {string}        [options.text]
  *
  * @param {Number}        [options.timeout]
- *
- * @param {Object}        options.data
  *
  * @param {Node}          [options.$faElem]
  * @param {Node}          [options.faElem] @deprecated
