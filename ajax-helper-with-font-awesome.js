@@ -3,15 +3,15 @@
  */
 
 /**
- * @param {string}        options.url  Адрес страницы
- * @param {string|null}   [options.uri] @deprecated
- * @param {Object}        options.data Передаваемые данные в видео объекта с полями или пустой объект
+ * @param {string}               options.url  Адрес страницы
+ * @param {string|null}          [options.uri] @deprecated
+ * @param {Object|FormData|null} [options.data] Передаваемые данные в видео объекта с полями
  *
- * @param {Object|null}   [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
- * @param {Object|null}   [options.faElem] @deprecated
+ * @param {HTMLElement|null}   [options.$faElem] Элемент fontAwesome иконки, которая будет отображать, что процесс идёт вращающейся иконкой ({@see https://fontawesome.com/v4.7.0/examples/#animated})
+ * @param {HTMLElement|null}   [options.faElem] @deprecated
  *
- * @param {Object|null}   [options.$ajaxHolder] Элемент, на котором выполняется запрос
- * @param {Object|null}   [options.ajaxHolder] @deprecated
+ * @param {HTMLElement|null}   [options.$ajaxHolder] Элемент, на котором выполняется запрос
+ * @param {HTMLElement|null}   [options.ajaxHolder] @deprecated
  *
  * @param {string|null}   [options.errorTitle] Текст подписи на случай ошибки
  * @param {string|null}   [options.errorText]  Текст сообщения на случай ошибки
@@ -34,7 +34,7 @@ $.fn.ajaxHelper = function(options) {
     let errors = [];
 
     let isSVG = false;
-    let parent = null;
+    let $parentForFaIcon = null;
     let faSpinClassName = "-circle-o-notch";
 
     let $ajaxHolder = $(this);
@@ -47,7 +47,7 @@ $.fn.ajaxHelper = function(options) {
     if (!options.uri)
         errors.push("Не указан аргумент «uri»!");
 
-    if (!(options.data instanceof Object))
+    if (options.data && !(options.data instanceof Object))
         errors.push("Аргумент «data»! должен быть объектом! Указан " + typeof options.data);
 
     if (!options.errorTitle)
@@ -81,7 +81,7 @@ $.fn.ajaxHelper = function(options) {
 
     // В fontawesome теперь элемент «i» заменяется на элемент «svg»:
     if (!$faElem.length)
-        $faElem = this.find("svg:first");
+        $faElem = $ajaxHolder.find("svg:first");
 
     // Если fontawesome в span, который будет родителем:
     if ($faElem && $faElem.prop("tagName").match(/svg/i) || isSVG)
@@ -89,9 +89,9 @@ $.fn.ajaxHelper = function(options) {
         isSVG = true;
         faSpinClassName = "-circle-notch";
         // обернуть fontawesome – это SVG элемент:
-        parent = $("<span></span>");
-        $faElem.after(parent);
-        parent.append($faElem);
+        $parentForFaIcon = $("<span></span>");
+        $faElem.after($parentForFaIcon);
+        $parentForFaIcon.append($faElem);
     }
 
     // В fontawesome теперь элемент «i» заменяется на элемент «svg»:
@@ -195,7 +195,7 @@ $.fn.ajaxHelper = function(options) {
                 if (!isSVG)
                     $faElem.attr("class",$faElem.data("fa"));
                 else
-                    parent.find("svg").replaceWith($faElem);
+                    $parentForFaIcon.find("svg").replaceWith($faElem);
 
                 if (options.onComplete)
                     options.onComplete();
@@ -315,7 +315,7 @@ $.fn.ajaxHelper = function(options) {
                     if (!isSVG)
                         $faElem.attr("class",$faElem.data("fa"));
                     else
-                        parent.find("svg").replaceWith($faElem);
+                        $parentForFaIcon.find("svg").replaceWith($faElem);
 
                     if (textStatus === "abort" && (options.abort || options.ignore))
                     {
