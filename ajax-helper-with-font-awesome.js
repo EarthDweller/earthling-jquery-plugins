@@ -93,9 +93,9 @@ $.fn.ajaxHelper = function(options) {
 		faSpinClassName = "-circle-notch";
         $parentForFaIcon = $faElem.parent();
 		// обернуть fontawesome – это SVG элемент:
-		if (!$parentForFaIcon.prop("tagName").match(/span/i))
+		if (!$parentForFaIcon.hasClass("ajax-helper-parent"))
 		{
-			$parentForFaIcon = $("<span></span>");
+			$parentForFaIcon = $("<span class='ajax-helper-parent'></span>");
 			$faElem.after($parentForFaIcon);
 			$parentForFaIcon.append($faElem);
 		}
@@ -227,7 +227,7 @@ $.fn.ajaxHelper = function(options) {
 							console.log(response);
 							modalConfirm.ask({
 								  title    : response.hasOwnProperty("errorTitle") ? response.errorTitle : options.errorTitle
-								, body     : response.body ?? "При запросе произошла ошибка! В ответе от сервера не указано, что ответ передан полностью!"
+								, body     : response.error ?? "При запросе произошла ошибка! В ответе от сервера не указано, что ответ передан полностью!"
 								, refuseBtn: null
 								, confirmBtn: "Закрыть"
 							});
